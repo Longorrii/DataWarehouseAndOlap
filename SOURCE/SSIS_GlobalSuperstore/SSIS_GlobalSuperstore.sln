@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{C9674DCB-5085-4A16-B785-4C70DD1589BD}") = "SSIS_GlobalSuperstore", "SSIS_GlobalSuperstore.dtproj", "{0BD43AEB-43DE-490B-874A-E144825F6E44}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BD43AEB-43DE-490B-874A-E144825F6E44}.Development|Default.ActiveCfg = Development
+		{0BD43AEB-43DE-490B-874A-E144825F6E44}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3248BF22-966C-4F01-9510-0CE241B38B29}
+	EndGlobalSection
+EndGlobal
