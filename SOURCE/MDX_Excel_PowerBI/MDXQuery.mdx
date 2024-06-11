@@ -1,0 +1,126 @@
+﻿-- Roll up : 7
+-- Drill down: 7
+-- Pivot: 5
+-- Slice and dice: 5
+
+-- Roll up: 7 câu
+-- Câu 1: Tổng lợi nhuận (Profit) theo tháng, năm
+SELECT NON EMPTY { [Measures].[Profit] } ON COLUMNS,
+  NON EMPTY (
+    [Dim Order Date].[Month].CHILDREN,
+    [Dim Order Date].[Year].CHILDREN
+  ) ON ROWS
+FROM [WH Global Superstore];
+
+-- Câu 2: Tổng lợi nhuận (Profit) theo khu vực (Region)
+SELECT NON EMPTY { [Measures].[Profit] } ON COLUMNS,
+  NON EMPTY { [Dim Location].[Region].CHILDREN } ON ROWS
+FROM [WH Global Superstore];
+
+-- Câu 3: Tổng số lượng sản phẩm bán ra (Quantity) theo danh mục sản phẩm (Category)
+SELECT NON EMPTY { [Measures].[Quantity] } ON COLUMNS,
+  NON EMPTY { [Dim Product].[Category].CHILDREN } ON ROWS
+FROM [WH Global Superstore];
+
+-- Câu 4: Tổng doanh thu (Sales) và lợi nhuận (Profit) theo năm và khu vực (Region)
+SELECT NON EMPTY { [Measures].[Sales],
+  [Measures].[Profit] } ON COLUMNS,
+  NON EMPTY (
+    [Dim Order Date].[Year].CHILDREN,
+    [Dim Location].[Region].CHILDREN
+  ) ON ROWS
+FROM [WH Global Superstore];
+
+-- Câu 5: Tổng số lượng sản phẩm bán ra (Quantity) và doanh thu (Sales) theo danh mục sản phẩm (Category) và phân khúc khách hàng (Segment)
+SELECT NON EMPTY { [Measures].[Quantity],
+  [Measures].[Sales] } ON COLUMNS,
+  NON EMPTY (
+    [Dim Product].[Category].CHILDREN,
+    [Dim Customer].[Segment].CHILDREN
+  ) ON ROWS
+FROM [WH Global Superstore];
+
+-- Câu 6: Tổng doanh thu (Sales) theo quốc gia (Country) và phương thức giao hàng (Ship_Mode)
+SELECT NON EMPTY { [Measures].[Sales] } ON COLUMNS,
+  NON EMPTY (
+    [Dim Location].[Country].CHILDREN,
+    [Dim Ship Mode].[Ship Mode].CHILDREN
+  ) ON ROWS
+FROM [WH Global Superstore];
+
+-- Câu 7: Tổng doanh thu (Sales) theo ngày trong tuần và khu vực (Region)
+SELECT NON EMPTY { [Measures].[Sales] } ON COLUMNS,
+  NON EMPTY (
+    [Dim Order Date].[Weekday].CHILDREN,
+    [Dim Location].[Region].CHILDREN
+  ) ON ROWS
+FROM [WH Global Superstore];
+
+
+-- Câu 8: 2 tháng có doanh thu cao nhất trong năm 2018
+
+WITH
+MEMBER [Measures].[Top2Months] AS
+    Aggregate(
+        TopCount(
+            [Dim Order Date].[Month].[Month].Members,
+            2,
+            [Measures].[Sales]
+        )
+    )
+SELECT
+NON EMPTY {[Measures].[Sales]} ON COLUMNS,
+NON EMPTY TopCount(
+    [Dim Order Date].[Month].[Month].Members,
+    2,
+    [Measures].[Sales]
+) ON ROWS
+FROM [WH Global Superstore]
+WHERE ([Dim Order Date].[Year].&[2018])
+
+
+
+
+
+-- Drill Down: 7 câu
+
+-- Câu 1: Chi tiết doanh thu (Sales) theo từng tháng trong năm 2023
+
+-- Câu 2: Chi tiết lợi nhuận (Profit) theo từng thành phố (City) trong khu vực (Region) "North America"
+
+-- Câu 3: Chi tiết doanh thu (Sales) theo từng sản phẩm (Product_Name) trong danh mục "Furniture"
+
+-- Câu 4: Chi tiết doanh thu (Sales) theo từng tháng trong năm 2023 và từng thành phố (City)
+
+-- Câu 5: Chi tiết lợi nhuận (Profit) theo từng thành phố (City) trong khu vực (Region) "North America" và phân khúc khách hàng (Segment)
+
+-- Câu 6: Chi tiết doanh thu (Sales) và lợi nhuận (Profit) theo từng sản phẩm (Product_Name) trong danh mục "Furniture" và từng quý (Quarter)
+
+-- Câu 7: Chi tiết số lượng sản phẩm bán ra (Quantity) theo từng sản phẩm con (Sub_Category) trong danh mục "Furniture"
+
+
+-- Pivot: 5 câu
+
+-- Câu 1: Doanh thu (Sales) theo năm và từng khu vực (Region)
+
+-- Câu 2: Lợi nhuận (Profit) theo quý (Quarter) và phương thức giao hàng (Ship_Mode)
+
+-- Câu 3: Doanh thu (Sales) và lợi nhuận (Profit) theo năm và từng khu vực (Region)
+
+-- câu 4: Lợi nhuận (Profit) và chi phí vận chuyển (Shipping_Cost) theo quý (Quarter) và phương thức giao hàng (Ship_Mode)
+
+-- Câu 5: Tổng doanh thu (Sales) theo thị trường (Market) và phương thức giao hàng (Ship_Mode)
+
+
+-- Slice and Dice: 5 câu
+
+-- Câu 1: Doanh thu (Sales) và số lượng (Quantity) theo từng danh mục (Category)
+
+-- Câu 2: Lợi nhuận (Profit) theo từng phân khúc khách hàng (Segment) và mức độ ưu tiên đơn hàng (Order_Priority)
+
+-- Câu 3: Doanh thu (Sales) và số lượng (Quantity) theo từng danh mục (Category) và mức độ ưu tiên đơn hàng (Order_Priority) trong năm 2023
+
+-- Câu 4: Lợi nhuận (Profit) theo từng phân khúc khách hàng (Segment) và quốc gia (Country) cho các đơn hàng có chiết khấu (Discount) trên 10%
+
+-- Câu 5: Doanh thu (Sales) và lợi nhuận (Profit) theo thành phố (City) và bang (State)
+
