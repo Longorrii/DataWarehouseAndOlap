@@ -1,0 +1,6 @@
+Discount,City_Score,Country_Score,State_Score,Predicted_Label_RF,Predicted_Label_LR,Predicted_Label_NB,Predicted_Label_P
+0.2,0,2,0,Profitable,Profitable,Unprofitable,Unprofitable
+0.4,0,2,0,Unprofitable,Unprofitable,Unprofitable,Unprofitable
+0.0,3,2,3,Profitable,Profitable,Profitable,Profitable
+0.1,4,3,0,Profitable,Profitable,Profitable,Unprofitable
+0.17,0,0,0,Profitable,Profitable,Unprofitable,Profitable
