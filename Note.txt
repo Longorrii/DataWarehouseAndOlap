@@ -1,0 +1,137 @@
+Thực hiện quá trình SSIS
+
+Server name: LONGORRII\LONGORRII
+
+Window user: LONGORRII\ASUS
+
+-- Tạo 2 database GlobalSuperstore & WH_GlobalSuperstore
+CREATE DATABASE GlobalSuperstore;
+CREATE DATABASE WH_GlobalSuperstore;
+
+-- Các bảng DIM trong WH_GlobalSuperstore
+Dim_Customer
+Dim_Product
+Dim_Location
+Dim_Market
+Dim_OrderDate
+Dim_ShipDate
+Dim_OrderPriority
+Dim_ShipMode
+
+
+-- Cấu hình Conditional Split để loại bỏ các dòng NULL (nếu có) ở các cột
+
+-- Dim_Customer
+ISNULL(Customer_ID) || ISNULL(Customer_Name) || ISNULL(Segment)
+
+-- Dim_Product
+ISNULL(Product_Name) || ISNULL(Sub_Category) || ISNULL(Category)
+
+-- Dim_Location
+ISNULL(City) || ISNULL(State) || ISNULL(Country) || ISNULL(Region)
+
+-- Dim_Market
+ISNULL(Market)
+
+-- Dim_OrderDate
+ISNULL(Order_Date)
+
+-- Dim_ShipDate
+ISNULL(Ship_Date)
+
+-- Dim_OrderPriority
+ISNULL(Order_Priority)
+
+-- Dim_ShipMode
+ISNULL(Ship_Mode)
+
+-- Tạo các bảng Dim và bảng Fact
+
+CREATE TABLE Dim_Customer (
+    Customer_ID nvarchar(50) PRIMARY KEY,
+    Customer_Name nvarchar(50),
+    Segment nvarchar(50)
+);
+
+CREATE TABLE Dim_Product (
+    Product_ID INT IDENTITY(1,1) PRIMARY KEY,
+    Product_Name nvarchar(255),
+    Sub_Category nvarchar(50),
+    Category nvarchar(50)
+);
+
+CREATE TABLE Dim_Location (
+    Location_ID INT IDENTITY(1,1) PRIMARY KEY,
+    City nvarchar(50),
+    State nvarchar(50),
+    Country nvarchar(50),
+    Region nvarchar(50)
+);
+
+CREATE TABLE Dim_Market (
+    Market nvarchar(50) PRIMARY KEY
+);
+
+CREATE TABLE Dim_OrderDate (
+    Order_Date DATE PRIMARY KEY,
+    Day INT,
+    Month INT,
+    Year INT,
+    Weekday INT,
+    Quarter INT
+);
+
+CREATE TABLE Dim_ShipDate (
+    Ship_Date DATE PRIMARY KEY,
+    Day INT,
+    Month INT,
+    Year INT,
+    Weekday INT,
+    Quarter INT
+);
+
+CREATE TABLE Dim_OrderPriority (
+    Order_Priority nvarchar(50) PRIMARY KEY
+);
+
+CREATE TABLE Dim_ShipMode (
+    Ship_Mode nvarchar(50) PRIMARY KEY
+);
+
+CREATE TABLE Fact (
+    ID INT PRIMARY KEY,
+    Customer_ID nvarchar(50),
+    Product_ID INT,
+    Location_ID INT,
+    Market nvarchar(50),
+    Order_Date DATE,
+    Ship_Date DATE,
+    Order_Priority nvarchar(50),
+    Ship_Mode nvarchar(50),
+    Discount FLOAT,
+    Profit FLOAT,
+    Quantity INT,
+    Sales FLOAT,
+    Shipping_Cost FLOAT
+);
+
+-- Thêm khóa ngoại
+ALTER TABLE Fact ADD CONSTRAINT FK_Customer_ID FOREIGN KEY (Customer_ID) REFERENCES Dim_Customer(Customer_ID);
+ALTER TABLE Fact ADD CONSTRAINT FK_Product_ID FOREIGN KEY (Product_ID) REFERENCES Dim_Product(Product_ID);
+ALTER TABLE Fact ADD CONSTRAINT FK_Location_ID FOREIGN KEY (Location_ID) REFERENCES Dim_Location(Location_ID);
+ALTER TABLE Fact ADD CONSTRAINT FK_Market FOREIGN KEY (Market) REFERENCES Dim_Market(Market);
+ALTER TABLE Fact ADD CONSTRAINT FK_Order_Date FOREIGN KEY (Order_Date) REFERENCES Dim_OrderDate(Order_Date);
+ALTER TABLE Fact ADD CONSTRAINT FK_Ship_Date FOREIGN KEY (Ship_Date) REFERENCES Dim_ShipDate(Ship_Date);
+ALTER TABLE Fact ADD CONSTRAINT FK_Order_Priority FOREIGN KEY (Order_Priority) REFERENCES Dim_OrderPriority(Order_Priority);
+ALTER TABLE Fact ADD CONSTRAINT FK_Ship_Mode FOREIGN KEY (Ship_Mode) REFERENCES Dim_ShipMode(Ship_Mode);
+
+-- Xóa dữ liệu
+DELETE FROM Fact;
+DELETE FROM Dim_Customer;
+DELETE FROM Dim_Product;
+DELETE FROM Dim_Location;
+DELETE FROM Dim_Market;
+DELETE FROM Dim_OrderDate;
+DELETE FROM Dim_ShipDate;
+DELETE FROM Dim_OrderPriority;
+DELETE FROM Dim_ShipMode;
