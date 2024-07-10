@@ -1,0 +1,6 @@
+Discount	City	State	Country
+0.2	Chicago	Illinois	United States
+0.4	Philadelphia	Pennsylvania	United States
+0	Alexandria	Al Iskandariyah	Egypt
+0.1	Celle	Lower Saxony	Germany
+0.17	Bangkok	Bangkok	Thailand
